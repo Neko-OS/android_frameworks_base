@@ -34,8 +34,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import vendor.aospa.biometrics.face.ISenseService;
-import vendor.aospa.biometrics.face.ISenseServiceReceiver;
+import vendor.android.biometrics.face.ISenseService;
+import vendor.android.biometrics.face.ISenseServiceReceiver;
 
 public class TestHal extends ISenseService.Stub {
     private static final String TAG = "face.hidl.TestHal";

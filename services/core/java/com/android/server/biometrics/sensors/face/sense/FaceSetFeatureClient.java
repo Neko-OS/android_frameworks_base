@@ -33,7 +33,7 @@ import com.android.server.biometrics.sensors.HalClientMonitor;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
-import vendor.aospa.biometrics.face.ISenseService;
+import vendor.android.biometrics.face.ISenseService;
 
 public class FaceSetFeatureClient extends HalClientMonitor<ISenseService> {
 

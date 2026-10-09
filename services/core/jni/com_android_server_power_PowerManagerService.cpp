@@ -27,8 +27,8 @@
 #include <android/system/suspend/ISuspendControlService.h>
 #include <android/system/suspend/internal/ISuspendControlServiceInternal.h>
 #include <nativehelper/JNIHelp.h>
-#include <vendor/aospa/power/Feature.h>
-#include <vendor/aospa/power/IPowerFeature.h>
+#include <vendor/android/power/Feature.h>
+#include <vendor/android/power/IPowerFeature.h>
 #include "jni.h"
 
 #include <nativehelper/ScopedUtfChars.h>
@@ -62,8 +62,8 @@ using android::system::suspend::ISuspendControlService;
 using IPowerV1_1 = android::hardware::power::V1_1::IPower;
 using IPowerV1_0 = android::hardware::power::V1_0::IPower;
 using IPowerAidl = android::hardware::power::IPower;
-using PowerFeature = vendor::aospa::power::Feature;
-using vendor::aospa::power::IPowerFeature;
+using PowerFeature = vendor::android::power::Feature;
+using vendor::android::power::IPowerFeature;
 
 namespace android {
 
@@ -77,7 +77,7 @@ static struct {
 
 static jobject gPowerManagerServiceObj;
 static power::PowerHalController gPowerHalController;
-static sp<IPowerFeature> gPowerAospaHalAidl_ = nullptr;
+static sp<IPowerFeature> gPowerAndroidHalAidl_ = nullptr;
 static nsecs_t gLastEventTime[USER_ACTIVITY_EVENT_LAST + 1];
 
 // Throttling interval for user activity calls.
@@ -97,17 +97,17 @@ static bool checkAndClearExceptionFromCallback(JNIEnv* env, const char* methodNa
 
 // The caller must be holding gPowerHalMutex.
 static bool connectPowerFeatureHalLocked() {
-    static bool gPowerAospaHalAidlExists = true;
-    if (gPowerAospaHalAidlExists) {
-        if (!gPowerAospaHalAidl_) {
-            gPowerAospaHalAidl_ = waitForVintfService<IPowerFeature>();
+    static bool gPowerAndroidHalAidlExists = true;
+    if (gPowerAndroidHalAidlExists) {
+        if (!gPowerAndroidHalAidl_) {
+            gPowerAndroidHalAidl_ = waitForVintfService<IPowerFeature>();
         }
-        if (gPowerAospaHalAidl_) {
+        if (gPowerAndroidHalAidl_) {
             ALOGV("Successfully connected to PowerFeature HAL AIDL service.");
             return true;
         } else {
             ALOGV("Couldn't load PowerFeature HAL AIDL service");
-            gPowerAospaHalAidlExists = false;
+            gPowerAndroidHalAidlExists = false;
         }
     }
     return false;
@@ -269,11 +269,11 @@ static jboolean nativeSetPowerMode(JNIEnv* /* env */, jclass /* clazz */, jint m
     return setPowerMode(static_cast<Mode>(mode), enabled);
 }
 
-static void nativeSetParanoidFeature(JNIEnv* /* env */, jclass /* clazz */, jint featureId,
+static void nativeSetNekoFeature(JNIEnv* /* env */, jclass /* clazz */, jint featureId,
                                    jint data) {
-    // Try using AOSPAs power hal. If it fails or isn't available, ignore
+    // Try using the vendor power hal. If it fails or isn't available, ignore
     if (connectPowerFeatureHalLocked()) {
-        gPowerAospaHalAidl_->setFeature(static_cast<PowerFeature>(featureId), static_cast<bool>(data));
+        gPowerAndroidHalAidl_->setFeature(static_cast<PowerFeature>(featureId), static_cast<bool>(data));
     }
 }
 
@@ -296,7 +296,7 @@ static const JNINativeMethod gPowerManagerServiceMethods[] = {
         {"nativeSetAutoSuspend", "(Z)V", (void*)nativeSetAutoSuspend},
         {"nativeSetPowerBoost", "(II)V", (void*)nativeSetPowerBoost},
         {"nativeSetPowerMode", "(IZ)Z", (void*)nativeSetPowerMode},
-        {"nativeSetParanoidFeature", "(II)V", (void*)nativeSetParanoidFeature},
+        {"nativeSetNekoFeature", "(II)V", (void*)nativeSetNekoFeature},
 };
 
 #define FIND_CLASS(var, className) \

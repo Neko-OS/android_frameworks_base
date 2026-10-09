@@ -42,7 +42,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-import vendor.aospa.biometrics.face.ISenseService;
+import vendor.android.biometrics.face.ISenseService;
 
 public class FaceEnrollClient extends EnrollClient<ISenseService> {
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.server.lineage.health;
+package com.android.server.health;
 
 import android.Manifest;
 import android.content.Context;
@@ -27,9 +27,9 @@ import com.android.server.ServiceThread;
 
 import com.android.server.SystemService;
 
-import com.android.internal.lineage.app.LineageContextConstants;
-import com.android.internal.lineage.health.IHealthInterface;
-import vendor.lineage.health.ChargingControlSupportedMode;
+import com.android.internal.app.LineageContextConstants;
+import com.android.internal.health.IHealthInterface;
+import vendor.android.health.ChargingControlSupportedMode;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -65,7 +65,7 @@ public class HealthInterfaceService extends SystemService {
         }
 
         if (!mFeatures.isEmpty()) {
-            publishBinderService(LineageContextConstants.LINEAGE_HEALTH_INTERFACE, mService);
+            publishBinderService(LineageContextConstants.ANDROID_HEALTH_INTERFACE, mService);
         }
     }
 

@@ -33,7 +33,7 @@ import java.io.File;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import vendor.aospa.biometrics.face.ISenseService;
+import vendor.android.biometrics.face.ISenseService;
 
 public class FaceUpdateActiveUserClient extends HalClientMonitor<ISenseService> {
     private static final String TAG = "FaceUpdateActiveUserClient";

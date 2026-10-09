@@ -95,7 +95,7 @@ public class NavigationBarInflaterView extends FrameLayout
     private static final String KEY_NAVIGATION_HINT =
             Settings.Secure.NAVIGATION_BAR_HINT;
     private static final String OVERLAY_NAVIGATION_HIDE_HINT =
-            "co.aospa.overlay.systemui.immnav.gestural";
+            "co.android.overlay.systemui.immnav.gestural";
 
     private static class Listener implements NavigationModeController.ModeChangedListener {
         private final WeakReference<NavigationBarInflaterView> mSelf;

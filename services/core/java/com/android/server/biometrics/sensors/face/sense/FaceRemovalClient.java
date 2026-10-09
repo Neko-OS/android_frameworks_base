@@ -33,7 +33,7 @@ import com.android.server.biometrics.sensors.RemovalClient;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import vendor.aospa.biometrics.face.ISenseService;
+import vendor.android.biometrics.face.ISenseService;
 
 class FaceRemovalClient extends RemovalClient<Face, ISenseService> {
     private static final String TAG = "FaceRemovalClient";

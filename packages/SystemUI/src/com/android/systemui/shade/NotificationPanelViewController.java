@@ -236,7 +236,7 @@ import com.android.systemui.util.Utils;
 import com.android.systemui.util.time.SystemClock;
 import com.android.wm.shell.animation.FlingAnimationUtils;
 
-import com.android.systemui.aospa.NotificationLightsView;
+import com.android.systemui.NotificationLightsView;
 
 import kotlin.Unit;
 

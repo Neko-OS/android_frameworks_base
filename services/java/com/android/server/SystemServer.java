@@ -233,7 +233,7 @@ import com.android.server.wm.ActivityTaskManagerService;
 import com.android.server.wm.CrossDeviceService;
 import com.android.server.wm.WindowManagerGlobalLock;
 import com.android.server.wm.WindowManagerService;
-import com.android.server.lineage.health.HealthInterfaceService;
+import com.android.server.health.HealthInterfaceService;
 
 import dalvik.system.VMRuntime;
 import dalvik.system.PathClassLoader;

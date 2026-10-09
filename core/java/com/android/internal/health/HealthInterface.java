@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.internal.lineage.health;
+package com.android.internal.health;
 
 import android.content.Context;
 import android.os.IBinder;
@@ -22,7 +22,7 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
-import com.android.internal.lineage.app.LineageContextConstants;
+import com.android.internal.app.LineageContextConstants;
 
 public class HealthInterface {
     /**
@@ -71,7 +71,7 @@ public class HealthInterface {
         if (sService != null) {
             return sService;
         }
-        IBinder b = ServiceManager.getService(LineageContextConstants.LINEAGE_HEALTH_INTERFACE);
+        IBinder b = ServiceManager.getService(LineageContextConstants.ANDROID_HEALTH_INTERFACE);
         sService = IHealthInterface.Stub.asInterface(b);
         if (sService == null) {
             Log.e(TAG, "null health service, SAD!");

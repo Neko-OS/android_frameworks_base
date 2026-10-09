@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.internal.lineage.health;
+package com.android.internal.health;
 
 /** @hide */
 interface IHealthInterface {

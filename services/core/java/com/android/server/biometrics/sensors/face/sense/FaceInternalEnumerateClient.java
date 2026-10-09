@@ -32,7 +32,7 @@ import com.android.server.biometrics.sensors.InternalEnumerateClient;
 import java.util.List;
 import java.util.function.Supplier;
 
-import vendor.aospa.biometrics.face.ISenseService;
+import vendor.android.biometrics.face.ISenseService;
 
 class FaceInternalEnumerateClient extends InternalEnumerateClient<ISenseService> {
     private static final String TAG = "FaceInternalEnumerateClient";

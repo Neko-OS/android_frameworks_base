@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.server.lineage;
+package com.android.server;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -22,7 +22,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.UserHandle;
 
-import com.android.server.lineage.common.UserContentObserver;
+import com.android.server.common.UserContentObserver;
 
 import java.io.PrintWriter;
 

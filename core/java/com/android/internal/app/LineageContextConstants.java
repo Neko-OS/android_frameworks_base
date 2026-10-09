@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.internal.lineage.app;
+package com.android.internal.app;
 
 import android.annotation.SdkConstant;
 
@@ -40,6 +40,6 @@ public final class LineageContextConstants {
      *
      * @hide
      */
-    public static final String LINEAGE_HEALTH_INTERFACE = "lineagehealth";
+    public static final String ANDROID_HEALTH_INTERFACE = "androidhealth";
 
 }

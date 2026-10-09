@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import vendor.aospa.biometrics.face.ISenseService;
+import vendor.android.biometrics.face.ISenseService;
 
 class FaceInternalCleanupClient extends InternalCleanupClient<Face, ISenseService> {
 

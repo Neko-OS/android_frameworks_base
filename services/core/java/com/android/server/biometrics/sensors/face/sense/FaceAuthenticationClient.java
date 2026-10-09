@@ -48,7 +48,7 @@ import com.android.server.biometrics.sensors.face.UsageStats;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
-import vendor.aospa.biometrics.face.ISenseService;
+import vendor.android.biometrics.face.ISenseService;
 
 /**
  * Face-specific authentication client supporting the {@link android.hardware.biometrics.face.V1_0}

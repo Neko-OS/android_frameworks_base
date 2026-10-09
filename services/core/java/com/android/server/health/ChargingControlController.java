@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.server.lineage.health;
+package com.android.server.health;
 
 import static java.time.format.FormatStyle.SHORT;
 
@@ -53,13 +53,13 @@ import java.util.Calendar;
 
 import android.provider.Settings;
 
-import vendor.lineage.health.ChargingControlSupportedMode;
-import vendor.lineage.health.IChargingControl;
+import vendor.android.health.ChargingControlSupportedMode;
+import vendor.android.health.IChargingControl;
 
-import static com.android.internal.lineage.health.HealthInterface.MODE_NONE;
-import static com.android.internal.lineage.health.HealthInterface.MODE_AUTO;
-import static com.android.internal.lineage.health.HealthInterface.MODE_MANUAL;
-import static com.android.internal.lineage.health.HealthInterface.MODE_LIMIT;
+import static com.android.internal.health.HealthInterface.MODE_NONE;
+import static com.android.internal.health.HealthInterface.MODE_AUTO;
+import static com.android.internal.health.HealthInterface.MODE_MANUAL;
+import static com.android.internal.health.HealthInterface.MODE_LIMIT;
 
 public class ChargingControlController extends LineageHealthFeature {
     private final IChargingControl mChargingControl;
@@ -113,7 +113,7 @@ public class ChargingControlController extends LineageHealthFeature {
     // Only when the battery level is above this limit will the charging control be activated.
     private static int CHARGE_CTRL_MIN_LEVEL = 80;
     private static final String INTENT_PARTS =
-            "com.android.settings.lineage.health.CHARGING_CONTROL_SETTINGS";
+            "com.android.settings.health.CHARGING_CONTROL_SETTINGS";
 
     private static class ChargingStopReason {
         private static int BIT(int shift) {
@@ -714,7 +714,7 @@ public class ChargingControlController extends LineageHealthFeature {
 
         private static final int CHARGING_CONTROL_NOTIFICATION_ID = 1000;
         private static final String ACTION_CHARGING_CONTROL_CANCEL_ONCE =
-                "lineageos.platform.intent.action.CHARGING_CONTROL_CANCEL_ONCE";
+                "android.platform.intent.action.CHARGING_CONTROL_CANCEL_ONCE";
         private static final String CHARGING_CONTROL_CHANNEL_ID = "LineageHealthChargingControl";
 
         private boolean mIsDoneNotification = false;

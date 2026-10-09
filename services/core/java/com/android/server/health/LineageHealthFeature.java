@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-package com.android.server.lineage.health;
+package com.android.server.health;
 
 import android.content.Context;
 import android.os.Handler;
 
-import com.android.server.lineage.LineageBaseFeature;
+import com.android.server.LineageBaseFeature;
 
 public abstract class LineageHealthFeature extends LineageBaseFeature {
     protected static final String TAG = "LineageHealth";
