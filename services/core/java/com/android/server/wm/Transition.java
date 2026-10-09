@@ -63,6 +63,8 @@ import static com.android.server.wm.ActivityRecord.State.RESUMED;
 import static com.android.server.wm.ActivityTaskManagerInternal.APP_TRANSITION_RECENTS_ANIM;
 import static com.android.server.wm.ActivityTaskManagerInternal.APP_TRANSITION_SPLASH_SCREEN;
 import static com.android.server.wm.ActivityTaskManagerInternal.APP_TRANSITION_WINDOWS_DRAWN;
+import static com.android.server.wm.StartingData.AFTER_TRANSACTION_IDLE;
+import static com.android.server.wm.StartingData.AFTER_TRANSITION_FINISH;
 
 import android.annotation.IntDef;
 import android.annotation.NonNull;
@@ -174,6 +176,12 @@ class Transition implements BLASTSyncEngine.TransactionReadyListener {
     private final BLASTSyncEngine mSyncEngine;
     private final Token mToken;
     private IApplicationThread mRemoteAnimApp;
+
+    /**
+     * If this transition has a corresponding RemoteTransition, this tracks the process which will
+     * play the animation.
+     */
+    IApplicationThread mRemoteDelegate = null;
 
     /** Only use for clean-up after binder death! */
     private SurfaceControl.Transaction mStartTransaction = null;
@@ -1217,6 +1225,13 @@ class Transition implements BLASTSyncEngine.TransactionReadyListener {
                         enterAutoPip = true;
                     }
                 }
+
+                if (ar.mStartingData != null && ar.mStartingData.mRemoveAfterTransaction
+                        == AFTER_TRANSITION_FINISH
+                        && (!ar.isVisible() || !ar.mTransitionController.inTransition(ar))) {
+                    ar.mStartingData.mRemoveAfterTransaction = AFTER_TRANSACTION_IDLE;
+                    ar.removeStartingWindow();
+                }
                 final ChangeInfo changeInfo = mChanges.get(ar);
                 // Due to transient-hide, there may be some activities here which weren't in the
                 // transition.
@@ -1306,16 +1321,15 @@ class Transition implements BLASTSyncEngine.TransactionReadyListener {
         }
 
         // Update the input-sink (touch-blocking) state now that the animation is finished.
-        SurfaceControl.Transaction inputSinkTransaction = null;
+        boolean scheduleAnimation = false;
         for (int i = 0; i < mParticipants.size(); ++i) {
             final ActivityRecord ar = mParticipants.valueAt(i).asActivityRecord();
             if (ar == null || !ar.isVisible() || ar.getParent() == null) continue;
-            if (inputSinkTransaction == null) {
-                inputSinkTransaction = ar.mWmService.mTransactionFactory.get();
-            }
-            ar.mActivityRecordInputSink.applyChangesToSurfaceIfChanged(inputSinkTransaction);
+            scheduleAnimation = true;
+            ar.mActivityRecordInputSink.applyChangesToSurfaceIfChanged(ar.getPendingTransaction());
         }
-        if (inputSinkTransaction != null) inputSinkTransaction.apply();
+        // To apply pending transactions.
+        if (scheduleAnimation) mController.mAtm.mWindowManager.scheduleAnimationLocked();
 
         // Always schedule stop processing when transition finishes because activities don't
         // stop while they are in a transition thus their stop could still be pending.

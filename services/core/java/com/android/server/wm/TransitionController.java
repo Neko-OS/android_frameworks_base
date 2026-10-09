@@ -717,6 +717,11 @@ class TransitionController {
                 info = new ActivityManager.RunningTaskInfo();
                 startTask.fillTaskInfo(info);
             }
+
+            if (remoteTransition != null) {
+                transition.mRemoteDelegate = remoteTransition.getAppThread();
+            }
+
             final TransitionRequestInfo request = new TransitionRequestInfo(
                     transition.mType, info, remoteTransition, displayChange, transition.getFlags());
             transition.mLogger.mRequestTimeNs = SystemClock.elapsedRealtimeNanos();

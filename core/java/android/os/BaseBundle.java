@@ -426,12 +426,11 @@ public class BaseBundle {
             if (mOwnsLazyValues) {
                 Preconditions.checkState(mLazyValues >= 0,
                         "Lazy values ref count below 0");
-                // No more lazy values in mMap, so we can recycle the parcel early rather than
+                // No more lazy values in mMap, so we can destroy the parcel early rather than
                 // waiting for the next GC run
-                if (mLazyValues == 0) {
-                    Preconditions.checkState(mWeakParcelledData.get() != null,
-                            "Parcel recycled earlier than expected");
-                    recycleParcel(mWeakParcelledData.get());
+                Parcel parcel = mWeakParcelledData.get();
+                if (mLazyValues == 0 && parcel != null) {
+                    parcel.destroy();
                     mWeakParcelledData = null;
                 }
             }
@@ -471,10 +470,10 @@ public class BaseBundle {
             map.erase();
             map.ensureCapacity(count);
         }
-        int numLazyValues = 0;
+        int[] numLazyValues = new int[]{0};
         try {
-            numLazyValues = parcelledData.readArrayMap(map, count, !parcelledByNative,
-                    /* lazy */ ownsParcel, mClassLoader);
+            parcelledData.readArrayMap(map, count, !parcelledByNative,
+                    /* lazy */ ownsParcel, mClassLoader, numLazyValues);
         } catch (BadParcelableException e) {
             if (sShouldDefuse) {
                 Log.w(TAG, "Failed to parse Bundle, but defusing quietly", e);
@@ -485,14 +484,15 @@ public class BaseBundle {
         } finally {
             mWeakParcelledData = null;
             if (ownsParcel) {
-                if (numLazyValues == 0) {
-                    recycleParcel(parcelledData);
+                if (numLazyValues[0] == 0) {
+                    // No lazy value, we can directly recycle this parcel
+                    parcelledData.recycle();
                 } else {
                     mWeakParcelledData = new WeakReference<>(parcelledData);
                 }
             }
 
-            mLazyValues = numLazyValues;
+            mLazyValues = numLazyValues[0];
             mParcelledByNative = false;
             mMap = map;
             // Set field last as it is volatile
@@ -524,12 +524,6 @@ public class BaseBundle {
      */
     private static boolean isEmptyParcel(Parcel p) {
         return p == NoImagePreloadHolder.EMPTY_PARCEL;
-    }
-
-    private static void recycleParcel(Parcel p) {
-        if (p != null && !isEmptyParcel(p)) {
-            p.recycle();
-        }
     }
 
     /**
@@ -637,7 +631,10 @@ public class BaseBundle {
     public void clear() {
         unparcel();
         if (mOwnsLazyValues && mWeakParcelledData != null) {
-            recycleParcel(mWeakParcelledData.get());
+            Parcel parcel = mWeakParcelledData.get();
+            if (parcel != null) {
+                parcel.destroy();
+            }
         }
 
         mWeakParcelledData = null;
